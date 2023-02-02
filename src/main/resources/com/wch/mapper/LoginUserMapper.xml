@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wch.mapper.LoginUserMapper">
+    <!--实体类与数据库映射字段部分-->
+     <resultMap id="ResultMapUser" type="com.wch.pojo.LoginUser">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="userName" column="userName" jdbcType="VARCHAR"/>
+            <result property="passWord" column="passWord" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="realName" column="realName" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+
+        </resultMap>
+
+
+    <!--声明数据库字段-->
+    <sql id="LoginUser_field">
+        id,userName,passWord,phone,realName,sex,address,email,createTime,isDelete
+    </sql>
+
+    <!--实体类的属性-->
+    <sql id="LoginUser_insert">
+        #{id},#{userName},#{passWord},#{phone},#{realName},#{sex},#{address},#{email},#{createTime},#{isDelete}
+    </sql>
+
+    <!--查询时条件-->
+    <sql id="LoginUser_where">
+        <if test="id!=null">
+            and id = #{id}
+        </if>
+        <if test="userName!=null">
+            and userName=#{userName}
+        </if>
+        <if test="passWord!=null">
+            and passWord=#{passWord}
+        </if>
+        <if test="phone!=null">
+            and phone=#{phone}
+        </if>
+        <if test="realName!=null">
+            and realName=#{realName}
+        </if>
+        <if test="sex!=null">
+            and sex=#{sex}
+        </if>
+        <if test="address!=null">
+            and address=#{address}
+        </if>
+        <if test="email!=null">
+            and email=#{email}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime}
+        </if>
+        <if test="isDelete!=null">
+            and isDelete=#{isDelete}
+        </if>
+    </sql>
+
+    <!--更新结果-->
+    <sql id="LoginUser_update">
+        <if test="userName != null">
+            userName = #{userName},
+        </if>
+        <if test="passWord != null">
+            passWord = #{passWord},
+        </if>
+        <if test="phone != null">
+            phone = #{phone},
+        </if>
+        <if test="realName != null">
+            realName = #{realName},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="address != null">
+            address = #{address},
+        </if>
+        <if test="email != null">
+            email = #{email}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime}
+        </if>
+        <if test="isDelete!=null">
+            and isDelete=#{isDelete}
+        </if>
+    </sql>
+
+
+    <!--新增-->
+    <!-- 参数：实体类-->
+    <!--返回：主键(是将数据库自动生成的主键取出，赋值给对象的id)-->
+        <!--useGeneratedKeys:是否自动生成主键-->
+    <!--keyProperty="id"：主键是id -->
+    <insert id="insert" parameterType="com.wch.pojo.LoginUser" useGeneratedKeys="true" keyProperty="id">
+        insert into loginUser(
+           <include refid="LoginUser_field"/>
+         )values(
+           <include refid="LoginUser_insert"/>
+        )
+    </insert>
+
+    <!--根据实体主键删除一个实体-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from loginUser where id=#{id}
+    </delete>
+
+    <!--通过实体删除-->
+    <delete id="deleteByEntity" parameterType="com.wch.pojo.LoginUser">
+        delete from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </delete>
+
+    <!--通过map删除-->
+    <delete id="deleteByMap" parameterType="java.util.HashMap">
+        delete from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </delete>
+
+    <!--更新一个实体-->
+    <update id="update" parameterType="com.wch.pojo.LoginUser">
+        update user
+        <set>
+            <include refid="LoginUser_update"/>
+        </set>
+        where 1=1
+            <include refid="LoginUser_where"/>
+    </update>
+
+    <!--通过id进行修改-->
+    <update id="updateById" parameterType="com.wch.pojo.LoginUser">
+        update user
+        <set>
+            <include refid="LoginUser_update"/>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据参数查询(map)-->
+    <select id="listByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+    <!--根据参数查询-->
+        <select id="listByParms" resultMap="ResultMapUser" parameterType="java.lang.String">
+            select <include refid="LoginUser_field"/>
+            from loginUser where userName=#{userName}
+        </select>
+
+
+    <!--查询所有实体  ：查询整个表-->
+    <select id="listAll" resultMap="ResultMapUser">
+        select <include refid="LoginUser_field"/>
+        from loginUser
+    </select>
+
+    <!--查询所有实体,根据实体属性值为判断条件查询所有实体-->
+    <select id="listAllByEntity" resultMap="ResultMapUser" parameterType="com.wch.pojo.LoginUser">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+    <!--根据主键获取一个实体-->
+    <select id="load" resultMap="ResultMapUser" parameterType="java.lang.Integer">
+        select <include refid="LoginUser_field"/>
+        from loginUser where id=#{id}
+    </select>
+
+    <!--根据主键获取一个实体-->
+    <select id="getById" resultMap="ResultMapUser" parameterType="java.lang.Integer">
+        select <include refid="LoginUser_field"/>
+        from loginUser where id=#{id}
+    </select>
+
+    <!--通过map查询：不分页-->
+    <select id="getByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+    <!--通过对象查询：不分页-->
+    <select id="getByEntity" resultMap="ResultMapUser" parameterType="com.wch.mapper.LoginUserMapper">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+    <!--通过map查询分页-->
+    <select id="findByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+    <!--通过对象查询分页-->
+    <select id="findByEntity" resultMap="ResultMapUser" parameterType="com.wch.pojo.LoginUser">
+        select <include refid="LoginUser_field"/>
+        from loginUser where 1=1
+        <include refid="LoginUser_where"/>
+    </select>
+
+
+
+    <!--批量新增insertBatch-->
+    <select id="insertBatch" parameterType="java.util.List">
+        insert into loginUser(
+          <include refid="LoginUser_field"/>
+        )values
+        <foreach collection="list" item ="item" index="index" separator=",">
+            (#{item.userName},#{item.passWord},#{item.phone},,#{item.realName},#{item.sex},#{item.address},#{item.email})
+        </foreach>
+    </select>
+
+    <!--批量修改-->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update loginUser
+            <set>
+                <if test="item.userName != null">
+                    name=#{item.userName},
+                </if>
+                <if test="item.passWord != null">
+                    pid=#{item.passWord},
+                </if>
+                <if test="item.phone != null">
+                    isDelete=#{item.phone},
+                </if>
+                <if test="item.realName != null">
+                    isDelete=#{item.realName},
+                </if>
+                <if test="item.sex != null">
+                    isDelete=#{item.sex},
+                </if>
+                <if test="item.address != null">
+                    isDelete=#{item.address},
+                </if>
+                <if test="item.email != null">
+                    isDelete=#{item.email},
+                </if>
+            </set>
+                where 1=1
+            <if test="item.id!=null">
+                and id=#{item.id}
+            </if>
+        </foreach>
+    </update>
+
+   <!-- 封装纯sql语法-->
+    <!--查询一个对象返回map-->
+    <select id="getBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!--查询一个对象返回实体类-->
+    <select id="getBySqlReturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!--查询一个对象返回map列表-->
+    <select id="listBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!--查询列表返回实体-->
+    <select id="listBySqlReturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!--查询列表分页-->
+    <select id="findBySqlRerturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!--通过sql修改-->
+    <select id="updateBysql">
+        ${sql}
+    </select>
+
+    <!--通过sql删除-->
+    <select id="deleteBySql">
+        ${sql}
+    </select>
+
+</mapper>
